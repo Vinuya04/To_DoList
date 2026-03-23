@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#20392f">
+  <meta name="description" content="Track tasks, deadlines, priorities, and reminders in an installable planner app.">
+  <title>PulsePlan | Task Tracker</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Personal productivity dashboard</p>
+        <h1>Track tasks, see your month, and stay ahead of deadlines.</h1>
+      </div>
+      <div class="hero-card">
+        <p class="hero-label">Today</p>
+        <p class="hero-date" id="todayDate"></p>
+        <p class="hero-summary" id="todaySummary">0 tasks scheduled</p>
+        <div class="hero-actions">
+          <button class="secondary-button" id="installButton" type="button" hidden>Install app</button>
+          <button class="ghost-button" id="exportButton" type="button">Export</button>
+          <button class="ghost-button" id="importButton" type="button">Import</button>
+          <input id="importFileInput" type="file" accept="application/json" hidden>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel-form">
+        <div class="panel-heading">
+          <h2>Add a task</h2>
+          <button class="ghost-button" id="notificationButton" type="button">Enable reminders</button>
+        </div>
+
+        <form id="taskForm" class="task-form">
+          <label>
+            Task name
+            <input id="taskTitle" name="title" type="text" maxlength="80" placeholder="Finish project proposal" required>
+          </label>
+
+          <label>
+            Notes
+            <textarea id="taskNotes" name="notes" rows="3" maxlength="240" placeholder="Anything important to remember"></textarea>
+          </label>
+
+          <div class="form-grid">
+            <label>
+              Due date
+              <input id="taskDate" name="date" type="date" required>
+            </label>
+
+            <label>
+              Time
+              <input id="taskTime" name="time" type="time">
+            </label>
+
+            <label>
+              Priority
+              <select id="taskPriority" name="priority">
+                <option value="high">High</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+
+            <label>
+              Reminder
+              <select id="taskReminder" name="reminder">
+                <option value="none">No reminder</option>
+                <option value="0">At due time</option>
+                <option value="15">15 minutes before</option>
+                <option value="30">30 minutes before</option>
+                <option value="60">1 hour before</option>
+                <option value="1440">1 day before</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Save task</button>
+            <button class="secondary-button" id="resetButton" type="button">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel panel-calendar">
+        <div class="panel-heading">
+          <h2>Calendar</h2>
+          <div class="calendar-nav">
+            <button class="icon-button" id="prevMonth" type="button" aria-label="Previous month">&larr;</button>
+            <p id="calendarTitle"></p>
+            <button class="icon-button" id="nextMonth" type="button" aria-label="Next month">&rarr;</button>
+          </div>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </section>
+
+      <section class="panel panel-tasks">
+        <div class="panel-heading">
+          <h2>Tasks</h2>
+          <select id="statusFilter" aria-label="Filter tasks">
+            <option value="all">All tasks</option>
+            <option value="today">Due today</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="completed">Completed</option>
+            <option value="open">Open only</option>
+          </select>
+        </div>
+
+        <div class="stats-row" id="statsRow"></div>
+        <div id="taskList" class="task-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="taskCardTemplate">
+    <article class="task-card">
+      <div class="task-main">
+        <div class="task-topline">
+          <span class="priority-pill"></span>
+          <span class="task-date-line"></span>
+        </div>
+        <h3 class="task-title"></h3>
+        <p class="task-notes"></p>
+      </div>
+      <div class="task-actions">
+        <button class="secondary-button toggle-button" type="button"></button>
+        <button class="ghost-button delete-button" type="button">Delete</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
